@@ -158,10 +158,10 @@ class ContentCards extends React.Component {
                                                               </div>
                                                               :null)
                                                             })}
-                                                                  <Button variant="contained" color="secondary" className={classes.button}>
+                                                               {/* <Button variant="contained" color="secondary" className={classes.button}>
                                                                   Delete
-                                                                  <DeleteIcon className={classes.rightIcon} />
-                                                                </Button>
+                                                                  <DeleteIcon className={classes.rightIcon} /> 
+                                                                </Button>  */}
                                                         </CardContent>
                                                     </Card> : null
                                             )
