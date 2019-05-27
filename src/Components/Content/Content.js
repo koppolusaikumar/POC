@@ -108,7 +108,7 @@ class ContentCards extends React.Component {
                     {this.props.cardArrayNames.map((val) =>{
                     return ( <Card className={classes.card} key={val.id}>
                                     <CardContent>
-                                        <label className={classes.cardLable}><b>Name: </b>{val.name}</label>                                 
+                                        <label className={classes.cardLable}>{val.name}</label>                                 
                                         <IconButton
                                             aria-label="Delete"
                                             className={classes.delBut}
