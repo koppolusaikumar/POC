@@ -114,11 +114,7 @@ class ButtonAppBar extends React.Component{
 ButtonAppBar.propTypes = {
   classes: PropTypes.object.isRequired,
 };
- 
-// const mapStateToProps = state => ({
-//   todos: getVisibleTodos(state.todos, state.visibilityFilter)
-// })
- 
+  
 const mapDispatchToProps = dispatch => ({
   addNewCard: name => dispatch(addNewCard(name))
 })
