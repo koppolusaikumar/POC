@@ -85,8 +85,7 @@ class ContentCards extends React.Component {
 
 handleChange(event){
         event.preventDefault();  
-        let checkListTask = event.target.value;
-    
+        let checkListTask = event.target.value;   
         this.setState({checkListTask})
       };
     
@@ -111,13 +110,11 @@ handleChange(event){
    
     render(){
         const { classes } = this.props;
-        console.log('state', this.state);
         return (
             <>
 <div className={classes.allCards}>
-                    {this.props.cardArrayNames.map((val,value) =>{
-                      console.log('val', val);
-                      console.log('value',value);
+                    {this.props.cardArrayNames.map((val,key) =>{
+                      console.log((key+1)+'  maincardobject', val);
                     return ( <Card className={classes.card} key={val.id}>
                                     <CardContent>
                                         <label className={classes.cardLable}>{val.name}</label>                                  
@@ -137,6 +134,7 @@ handleChange(event){
                                             <AddIcon />
                                         </Fab>
                                         {val.innerCard.map((iVal)=>{
+                                          console.log("innercard",iVal)
                                             return (
                                               <Card className={classes.innerCard}>
                                                 <CardContent>
@@ -155,12 +153,12 @@ handleChange(event){
                                                         color="primary"
                                                         aria-label="Add"
                                                         className={classes.addBut}
-                                                        onClick={() => this.handleClickOpen(val.id, iVal.story)}
-                                                          
+                                                        onClick={() => this.handleClickOpen(val.id, iVal.story)}                                                        
                                                         >
                                                         <AddIcon />
                                                     </Fab>
                                                     {iVal.checkList.map((cVal)=>{
+                                                      console.log("check",cVal)
                                                       return (<div>
                                                       <Checkbox 
                                                         value="checked" 

@@ -19,7 +19,7 @@ const rootReducer = (state = intialState, action) => {
               innerCard:[]
             }
           ],
-          cardNumber:state.cardNumber+1
+          cardNumber:state.cardNumber+1        
         });
  
       case 'DELETE_CARD':
