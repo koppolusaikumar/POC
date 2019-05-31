@@ -1,5 +1,3 @@
-
- 
 const intialState = {
   cardNumber: 0,
   innerStory:1,
@@ -19,7 +17,7 @@ const rootReducer = (state = intialState, action) => {
               innerCard:[]
             }
           ],
-          cardNumber:state.cardNumber+1        
+          cardNumber:state.cardNumber+1
         });
  
       case 'DELETE_CARD':
@@ -38,7 +36,7 @@ const rootReducer = (state = intialState, action) => {
               checkList:[]
             }]}
           }
-            return {...val}
+           return val
         })
       return {...state, cardArrayNames: tempInnerCard}
  
@@ -97,9 +95,45 @@ const rootReducer = (state = intialState, action) => {
         })
         return {...state, cardArrayNames: updaatedCheckList}
  
+        case 'CHECKED_ITEMS_DELETE':
+        const deleteCheckList = state.cardArrayNames.map((val)=>{
+          if(val.id === action.id){
+            const checkDeleteInnercard = val.innerCard.map(iVal =>{
+              if(iVal.story === action.story){
+                const deleteChecked = iVal.checkList.filter(iiVal =>iiVal.isChecked !== true)
+                return {...iVal, checkList:deleteChecked}
+              }
+              return{...iVal}
+            })
+            return {...val, innerCard:checkDeleteInnercard}
+          }
+          return {...val}
+        })
+        return {...state, cardArrayNames: deleteCheckList}
+ 
+        case 'EDIT_CHECK_LIST':
+        const editCheckList = state.cardArrayNames.map((val)=>{
+          if(val.id === action.id){
+            const tempInnerc = val.innerCard.map(iVal =>{
+              if(iVal.story === action.story){
+                const tempCheckStatus = iVal.checkList.map(iiVal =>{
+                  if(iiVal.listNumber === action.listNumber){
+                    return {...iiVal, task: action.task}
+                  }
+                    return {...iiVal}
+                })
+                return {...iVal, checkList:tempCheckStatus}
+              }
+              return{...iVal}
+            })
+            return {...val, innerCard:tempInnerc}
+          }
+          return {...val}
+        })
+        return {...state, cardArrayNames: editCheckList}
       default:
         return state
     }
   }
   
-  export default rootReducer;
+  export default rootReducer

@@ -15,8 +15,8 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { deleteCard, addInnerCard, deleteInnerCard, addCkeckList, handleCheckBox } from './actions'
-
+ 
+import { deleteCard, addInnerCard, deleteInnerCard, addCkeckList, handleCheckBox, deleteChecked, editCkeckList } from './actions'
  
 const styles = {
   allCards:{
@@ -48,8 +48,21 @@ const styles = {
     margin:30,
     marginTop:50,
   },
+  rightIcon:{
+    top: 7,
+    position: "relative",
+  },
+  editButton:{
+    float:'right',
+    color:'blue',
+    marginTop:10,
+  },
+  checkListMain:{
+    marginTop:30,
+  }
+ 
 };
-
+ 
 class ContentCards extends React.Component {
     constructor(props){
         super(props)
@@ -58,7 +71,8 @@ class ContentCards extends React.Component {
             checkListTask:'',
             id:'',
             story:'',
-            anyCheck:false
+            listNumber:'',
+            edit:false
         };
     }
  
@@ -69,32 +83,48 @@ class ContentCards extends React.Component {
           story:story
          });
       };
+    handleClickOpenToEdit = (id, story, listNumber) =>{
+      this.setState({ 
+        open: true,
+        id:id,
+        story:story,
+        listNumber:listNumber,
+        edit:true
+       });
+    }
  
     handleCheckBox = (id, story, listNumber) => {
       this.props.handleCheckBox(id, story, listNumber);
-      this.props.checkList.forEach((val) => {
-              if(val.isChecked){
-                this.setState({anyCheck:true})
-              }
-          })
       };
     
       handleClose = () => {
-        this.setState({ open: false });
+        this.setState({ open: false, edit:false });
       };
-
-handleChange(event){
-        event.preventDefault();  
-        let checkListTask = event.target.value;   
+    
+      handleChange(event){
+       event.preventDefault();  
+        let checkListTask = event.target.value;
+    
         this.setState({checkListTask})
       };
     
       handleSubmit = () => {
-        this.props.addCkeckList(
-          this.state.checkListTask,
-          this.state.id,
-          this.state.story
+        console.log(this.state.edit)
+        if(this.state.edit === true){
+          this.props.editCkeckList(
+            this.state.checkListTask,
+            this.state.id,
+            this.state.story,
+            this.state.listNumber
+            )
+        }
+        else{
+          this.props.addCkeckList(
+            this.state.checkListTask,
+            this.state.id,
+            this.state.story
           )
+        }
         this.handleClose()
       };
  
@@ -112,9 +142,8 @@ handleChange(event){
         const { classes } = this.props;
         return (
             <>
-<div className={classes.allCards}>
-                    {this.props.cardArrayNames.map((val,key) =>{
-                      console.log((key+1)+'  maincardobject', val);
+                <div className={classes.allCards}>
+                    {this.props.cardArrayNames.map((val) =>{
                     return ( <Card className={classes.card} key={val.id}>
                                     <CardContent>
                                         <label className={classes.cardLable}>{val.name}</label>                                  
@@ -134,7 +163,6 @@ handleChange(event){
                                             <AddIcon />
                                         </Fab>
                                         {val.innerCard.map((iVal)=>{
-                                          console.log("innercard",iVal)
                                             return (
                                               <Card className={classes.innerCard}>
                                                 <CardContent>
@@ -146,40 +174,53 @@ handleChange(event){
                                                         onClick={() => this.deleteInnerCard(val.id, iVal.story)}
                                                         >
                                                         <DeleteIcon />
-                                          </IconButton>
+                                                    </IconButton>
                                                     <Fab
                                                         variant="extended"
                                                         size="small"
                                                         color="primary"
                                                         aria-label="Add"
                                                         className={classes.addBut}
-                                                        onClick={() => this.handleClickOpen(val.id, iVal.story)}                                                        
+                                                        onClick={() => this.handleClickOpen(val.id, iVal.story)}
+                                                          
                                                         >
                                                         <AddIcon />
                                                     </Fab>
-                                                    {iVal.checkList.map((cVal)=>{
-                                                      console.log("check",cVal)
-                                                      return (<div>
-                                                      <Checkbox 
-                                                        value="checked" 
-                                                        color="primary" 
-                                                        checked={cVal.isChecked}
-                                                        onChange={() => this.props.handleCheckBox(val.id, iVal.story, cVal.listNumber)}
-                                                      />
-                                                      <span>{cVal.task}</span>
+                                                    <div className={classes.checkListMain}>
+                                                      {iVal.checkList.map((cVal)=>{
+                                                        return (<div>
+                                                        <Checkbox 
+                                                          value="checked" 
+                                                          color="primary" 
+                                                          checked={cVal.isChecked}
+                                                          onChange={() => this.props.handleCheckBox(val.id, iVal.story, cVal.listNumber)}
+                                                        />
+                                                        <span>{cVal.task}</span>
+                                                        <Button 
+                                                        size="small" 
+                                                        color="secondary" 
+                                                        className={classes.editButton} 
+                                                        onClick={() => this.handleClickOpenToEdit(val.id, iVal.story, cVal.listNumber)}
+                                                        >
+                                                          Edit
+                                                        </Button>
+                                                        </div>
+                                                        )
+                                                        })}
                                                       </div>
-                                                      )
-                                                      })}
-                                                      {/* <Button
+                                                      <Button
                                                       variant="contained"
                                                       color="secondary"
-                                                      // style={{display:'none'}}
-                                                      className={classes.button}>
+                                                      style={(iVal.checkList.length === 0)? {display:'none'}:{display:'block'}}
+                                                      className={classes.button}
+                                                      onClick={() => this.props.deleteChecked(val.id, iVal.story)}
+                                                      >
+                                                      
                                                       Delete
                                                       <DeleteIcon
                                                       className={classes.rightIcon}
                                                       />
-                                                      </Button> */}
+                                                      </Button>
                                                   </CardContent>
                                                 </Card>
                                                   )
@@ -243,10 +284,13 @@ const mapDispatchToProps = dispatch => ({
     addInnerCard: id => dispatch(addInnerCard(id)),
     deleteInnerCard: (id, storyNo) => dispatch(deleteInnerCard(id, storyNo)),
     addCkeckList: (task, id, story) => dispatch(addCkeckList(task, id, story)),
-    handleCheckBox: (id, story, listNumber) => dispatch(handleCheckBox(id, story, listNumber))
+    handleCheckBox: (id, story, listNumber) => dispatch(handleCheckBox(id, story, listNumber)),
+    deleteChecked: (id, story) => dispatch(deleteChecked(id, story)),
+    editCkeckList: (task, id, story, listNumber) => dispatch(editCkeckList(task, id, story, listNumber))
   })
-
+  
   export default connect(
     mapStateToProps,
     mapDispatchToProps
   )(withStyles(styles)(ContentCards))
+ 
