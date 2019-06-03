@@ -57,10 +57,12 @@ const styles = {
     color:'blue',
     marginTop:10,
   },
+  button:{
+    fontSize:10,
+  },
   checkListMain:{
     marginTop:30,
   }
- 
 };
  
 class ContentCards extends React.Component {
@@ -210,16 +212,12 @@ class ContentCards extends React.Component {
                                                       </div>
                                                       <Button
                                                       variant="contained"
-                                                      color="secondary"
+                                                      color="gray"
                                                       style={(iVal.checkList.length === 0)? {display:'none'}:{display:'block'}}
                                                       className={classes.button}
                                                       onClick={() => this.props.deleteChecked(val.id, iVal.story)}
-                                                      >
-                                                      
-                                                      Delete
-                                                      <DeleteIcon
-                                                      className={classes.rightIcon}
-                                                      />
+                                                      >                                                     
+                                                      <b>Delete Tasks</b>                                                     
                                                       </Button>
                                                   </CardContent>
                                                 </Card>
@@ -242,7 +240,7 @@ class ContentCards extends React.Component {
               onClose={this.handleClose}
               aria-labelledby="form-dialog-title"
             >
-              <DialogTitle id="form-dialog-title">Add Task</DialogTitle>
+              <DialogTitle id="form-dialog-title">{this.state.edit ? "Edit Task":"Add Task"}</DialogTitle>
               <DialogContent>
                   <TextField
                     autoFocus
@@ -259,7 +257,7 @@ class ContentCards extends React.Component {
                   Cancel
                 </Button>
                 <Button onClick={this.handleSubmit} color="primary">
-                  Add
+                  {this.state.edit ? "Edit": "Add"}
                 </Button>
               </DialogActions>
             </Dialog>
