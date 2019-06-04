@@ -15,56 +15,6 @@ import {styles} from './Style'
  
 import { deleteCard, addInnerCard, deleteInnerCard, addCkeckList, handleCheckBox, deleteChecked, editCkeckList } from './actions'
  
-<<<<<<< HEAD
-=======
-const styles = {
-  allCards:{
-    position: 'relative',
-    display:'flex',
-    flexFlow: 'wrap',
-  },
-  card: {
-    minWidth: 500,
-    minHeight:300,
-    margin:30,
-    height:500,
-    overflow: 'auto',
-  },
-  cardLable:{
-    margin:10,
-  },
-  addBut:{
-      float: 'right'
-  },
-  delBut:{
-    float: 'right',
-    color: 'red',
-    marginLeft: 20,
-  },
-  innerCard:{
-    minWidth: 200,
-    minHeight:200,
-    margin:30,
-    marginTop:50,
-  },
-  rightIcon:{
-    top: 7,
-    position: "relative",
-  },
-  editButton:{
-    float:'right',
-    color:'blue',
-    marginTop:10,
-  },
-  button:{
-    fontSize:10,
-  },
-  checkListMain:{
-    marginTop:30,
-  }
-};
- 
->>>>>>> 3a59466c8b45b152001887ae3cdcc90ca66498ab
 class ContentCards extends React.Component {
     constructor(props){
         super(props)
@@ -201,20 +151,14 @@ class ContentCards extends React.Component {
                                                       </div>
                                                       <Button
                                                       variant="contained"
-<<<<<<< HEAD
                                                       color="gry"
-=======
-                                                      color="gray"
->>>>>>> 3a59466c8b45b152001887ae3cdcc90ca66498ab
                                                       style={(iVal.checkList.length === 0)? {display:'none'}:{display:'block'}}
                                                       className={classes.button}
                                                       onClick={() => this.props.deleteChecked(val.id, iVal.story)}
-                                                      >                                                     
-<<<<<<< HEAD
-                                                      <b>Delete Tasks</b>                                                    
-=======
-                                                      <b>Delete Tasks</b>                                                     
->>>>>>> 3a59466c8b45b152001887ae3cdcc90ca66498ab
+                                                      >
+                                                      
+                                                     <b>Delete Tasks</b> 
+                                                
                                                       </Button>
                                                   </CardContent>
                                                 </Card>
@@ -235,41 +179,6 @@ class ContentCards extends React.Component {
         );
     }
  
-<<<<<<< HEAD
-=======
-    addNewChecklistModel=()=>{
-        return(
-          <div>
-            <Dialog
-              open={this.state.open}
-              onClose={this.handleClose}
-              aria-labelledby="form-dialog-title"
-            >
-              <DialogTitle id="form-dialog-title">{this.state.edit ? "Edit Task":"Add Task"}</DialogTitle>
-              <DialogContent>
-                  <TextField
-                    autoFocus
-                    margin="dense"
-                    name="name"
-                    label="Task"
-                    type="text"
-                    fullWidth
-                    onChange={this.handleChange.bind(this)}
-                  />
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={this.handleClose} color="primary">
-                  Cancel
-                </Button>
-                <Button onClick={this.handleSubmit} color="primary">
-                  {this.state.edit ? "Edit": "Add"}
-                </Button>
-              </DialogActions>
-            </Dialog>
-          </div>
-        )
-    }
->>>>>>> 3a59466c8b45b152001887ae3cdcc90ca66498ab
 }
  
 ContentCards.propTypes = {
