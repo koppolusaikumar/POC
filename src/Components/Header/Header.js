@@ -110,7 +110,7 @@ class ButtonAppBar extends React.Component{
     )
   }
 }
- 
+
 ButtonAppBar.propTypes = {
   classes: PropTypes.object.isRequired,
 };
