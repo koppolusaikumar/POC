@@ -5,23 +5,22 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
- 
+
 export const AddNewChecklistModel=(props)=>{
     return(
       <div>
         <Dialog
           open={props.open}
-          onClose={props.handleClose}
-
+         onClose={props.handleClose}
           aria-labelledby="form-dialog-title"
         >
-          <DialogTitle id="form-dialog-title">{props.edit?"Edit Task" : "Add Task"}</DialogTitle>
+          <DialogTitle id="form-dialog-title">{props.edit?"Edit":"Add"}{props.addInner?" Inner Card":" Task"}</DialogTitle>
           <DialogContent>
               <TextField
                 autoFocus
                 margin="dense"
                 name="name"
-                label="Task"
+                label={props.addInner?"Add Inner Card":"Task"}
                 type="text"
                 fullWidth
                 onChange={props.handleChange.bind(this)}
@@ -32,8 +31,7 @@ export const AddNewChecklistModel=(props)=>{
               Cancel
             </Button>
             <Button onClick={props.handleSubmit} color="primary">
-              {props.edit ?
-                "Edit":"Add"}
+              {props.edit ? "edit":"add"}
             </Button>
           </DialogActions>
         </Dialog>

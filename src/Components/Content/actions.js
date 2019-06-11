@@ -4,9 +4,10 @@ export const deleteCard = (id) => ({
     id
 })
  
-export const addInnerCard = (id) => ({
+export const addInnerCard = (id,cardName) => ({
     type: 'ADD_INNER_CARD',
-    id
+    id,
+    cardName
 })
  
 export const deleteInnerCard = (id, storyNo) => ({

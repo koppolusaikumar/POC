@@ -1,6 +1,6 @@
 const intialState = {
   cardNumber: 0,
-  innerStory:1,
+  innerStory:0,
   listNumber:1,
   cardArrayNames:[],
 }
@@ -8,7 +8,7 @@ const intialState = {
 const rootReducer = (state = intialState, action) => {
     switch (action.type) {
       case 'ADD_NEW_CARD':
-        return Object.assign({}, state, {
+        return ({ ...state,
           cardArrayNames: [
             ...state.cardArrayNames,
             {
@@ -28,11 +28,12 @@ const rootReducer = (state = intialState, action) => {
       case 'ADD_INNER_CARD':  
         const tempInnerCard = state.cardArrayNames.map((val)=>{
           if(val.id === action.id){
+            state.innerStory=state.innerStory+1
             return {...val, innerCard:[ 
               ...val.innerCard,
               {
-              name:'User Story',
-              story:val.innerCard.length+1,
+              name:action.cardName,
+              story:state.innerStory,
               checkList:[]
             }]}
           }
@@ -41,15 +42,15 @@ const rootReducer = (state = intialState, action) => {
       return {...state, cardArrayNames: tempInnerCard}
  
       case 'DELETE_INNER_CARD':
-        const filteredInnerCards = state.cardArrayNames.map((val) => {
-          if(val.id === action.id){
-           const filterInner = val.innerCard.filter((iVal) => iVal.story !== action.storyNo )
-           return {...val, innerCard:filterInner}
-          }
-          return {...val}
-        })
-        return { ...state,
-          cardArrayNames: filteredInnerCards}
+      const filteredInnerCards = state.cardArrayNames.map((val) => {
+        if(val.id === action.id){
+         const tempInner = val.innerCard.filter((ival)=> ival.story !== action.storyNo)
+         return {...val, innerCard:tempInner}
+        }
+        return {...val}
+      })
+      return { ...state,
+        cardArrayNames: filteredInnerCards}
           
  
       case 'ADD_NEW_CHECK_LIST':

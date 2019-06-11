@@ -11,10 +11,9 @@ import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import {AddNewChecklistModel} from './TaskDialog'
 import CheckList from './CheckList';
-import {styles} from './Style'
- 
-import { deleteCard, addInnerCard, deleteInnerCard, addCkeckList, handleCheckBox, deleteChecked, editCkeckList } from './actions'
- 
+import {styles} from './Style';
+import { deleteCard, addInnerCard, deleteInnerCard, addCkeckList, handleCheckBox, deleteChecked, editCkeckList } from './actions';
+
 class ContentCards extends React.Component {
     constructor(props){
         super(props)
@@ -24,19 +23,20 @@ class ContentCards extends React.Component {
             id:'',
             story:'',
             listNumber:'',
-            edit:false
+            edit:false,
+            addInner:false
         };
     }
- 
+
     handleClickOpen = (id, story) => {
-        this.setState({ 
+        this.setState({
           open: true,
           id:id,
           story:story
          });
       };
     handleClickOpenToEdit = (id, story, listNumber) =>{
-      this.setState({ 
+      this.setState({
         open: true,
         id:id,
         story:story,
@@ -44,24 +44,30 @@ class ContentCards extends React.Component {
         edit:true
        });
     }
+
+    handleClickOpenToAddInnerCard = (id) =>{
+      this.setState({
+       open: true,
+        id:id,
+        addInner:true
+       });
+    }
  
     handleCheckBox = (id, story, listNumber) => {
       this.props.handleCheckBox(id, story, listNumber);
       };
-    
+   
       handleClose = () => {
-        this.setState({ open: false, edit:false });
+        this.setState({ open: false, edit:false, addInner:false });
       };
-    
+   
       handleChange(event){
-        event.preventDefault();  
+        event.preventDefault(); 
         let checkListTask = event.target.value;
-    
         this.setState({checkListTask})
-      };
-    
+      }
+   
       handleSubmit = () => {
-        console.log(this.state.edit)
         if(this.state.edit === true){
           this.props.editCkeckList(
             this.state.checkListTask,
@@ -70,7 +76,12 @@ class ContentCards extends React.Component {
             this.state.listNumber
             )
         }
-        else{
+        else if (this.state.addInner === true) {
+          this.props.addInnerCard(
+            this.state.id,
+            this.state.checkListTask
+            )
+        } else{
           this.props.addCkeckList(
             this.state.checkListTask,
             this.state.id,
@@ -83,47 +94,45 @@ class ContentCards extends React.Component {
     deleteCard = (id) => {
         this.props.deleteCard(id)
     }
-    addInnerCard = (id) => {
-        this.props.addInnerCard(id)
-    }
+    // addInnerCard = (id) => {
+    //     this.props.addInnerCard(id)
+    // }
     deleteInnerCard = (id, storyNo) => {
         this.props.deleteInnerCard(id, storyNo)
     }
-   
     render(){
         const { classes } = this.props;
         return (
             <>
-                {/* {this.props.cardArrayNames.length === 0?<PlanImg/>:null} */}
                 <div className={classes.allCards}>
                     {this.props.cardArrayNames.map((val) =>{
                     return ( <Card className={classes.card} key={val.id}>
                                     <CardContent>
-                                        <label className={classes.cardLable}>{val.name}</label>                                  
-                                        <IconButton 
-                                            aria-label="Delete" 
-                                            className={classes.delBut} 
+                                        <label className={classes.cardLable}>{val.name}</label>                                 
+                                        <IconButton
+                                            aria-label="Delete"
+                                            className={classes.delBut}
                                             onClick={() => this.deleteCard(val.id)}
-                                           >
+                                            >
                                             <DeleteIcon />
                                         </IconButton>
-                                        <Fab 
-                                            size="small" 
-                                            color="primary" 
-                                            aria-label="Add" 
-                                            className={classes.addBut} 
-                                            onClick = {() =>this.addInnerCard(val.id)}>
+                                        <Fab
+                                            size="small"
+                                            color="primary"
+                                            aria-label="Add"
+                                            className={classes.addBut}
+                                            onClick = {() =>this.handleClickOpenToAddInnerCard(val.id)}>
                                             <AddIcon />
                                         </Fab>
                                         {val.innerCard.map((iVal)=>{
                                             return (
                                               <Card className={classes.innerCard}>
                                                 <CardContent>
-                                                    <label className={classes.cardLable}><b>{iVal.name} {iVal.story}</b></label>                                  
-                                                    <IconButton 
-                                                        size="small" 
-                                                        aria-label="Delete" 
-                                                        className={classes.delBut} 
+                                                    <label className={classes.cardLable}><b>{iVal.name}</b></label>                                  
+                                                    <IconButton
+                                                        size="small"
+                                                        aria-label="Delete"
+                                                        className={classes.delBut}
                                                         onClick={() => this.deleteInnerCard(val.id, iVal.story)}
                                                         >
                                                         <DeleteIcon />
@@ -135,7 +144,6 @@ class ContentCards extends React.Component {
                                                         aria-label="Add"
                                                         className={classes.addBut}
                                                         onClick={() => this.handleClickOpen(val.id, iVal.story)}
-                                                          
                                                         >
                                                         <AddIcon />
                                                     </Fab>
@@ -151,14 +159,12 @@ class ContentCards extends React.Component {
                                                       </div>
                                                       <Button
                                                       variant="contained"
-                                                      color="gry"
+                                                      color="gray"
                                                       style={(iVal.checkList.length === 0)? {display:'none'}:{display:'block'}}
                                                       className={classes.button}
                                                       onClick={() => this.props.deleteChecked(val.id, iVal.story)}
-                                                      >
-                                                      
-                                                     <b>Delete Tasks</b> 
-                                                
+                                                      >                                                     
+                                                      Delete Tasks
                                                       </Button>
                                                   </CardContent>
                                                 </Card>
@@ -169,8 +175,9 @@ class ContentCards extends React.Component {
                     )}
                 </div>
                 <AddNewChecklistModel
-                edit={this.state.edit}
                 open={this.state.open}
+                edit={this.state.edit}
+                addInner={this.state.addInner}
                 handleClose={this.handleClose}
                 handleChange={this.handleChange.bind(this)}
                 handleSubmit={this.handleSubmit}
@@ -178,9 +185,8 @@ class ContentCards extends React.Component {
             </>
         );
     }
- 
 }
- 
+
 ContentCards.propTypes = {
   classes: PropTypes.object.isRequired
 };
@@ -188,17 +194,17 @@ ContentCards.propTypes = {
 const mapStateToProps = state => ({
     cardArrayNames: state.cardArrayNames,
 })
- 
+
 const mapDispatchToProps = dispatch => ({
     deleteCard: cardNumber => dispatch(deleteCard(cardNumber)),
-    addInnerCard: id => dispatch(addInnerCard(id)),
+    addInnerCard: (id, cardName) => dispatch(addInnerCard(id, cardName)),
     deleteInnerCard: (id, storyNo) => dispatch(deleteInnerCard(id, storyNo)),
     addCkeckList: (task, id, story) => dispatch(addCkeckList(task, id, story)),
     handleCheckBox: (id, story, listNumber) => dispatch(handleCheckBox(id, story, listNumber)),
     deleteChecked: (id, story) => dispatch(deleteChecked(id, story)),
     editCkeckList: (task, id, story, listNumber) => dispatch(editCkeckList(task, id, story, listNumber))
   })
-  
+
   export default connect(
     mapStateToProps,
     mapDispatchToProps
